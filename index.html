@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CAPE on a Skew-T · Union GEO 114 Extreme Weather</title>
+    <meta
+      name="description"
+      content="Pedagogical skew-T for Union GEO 114. See CAPE as a filled positive area that grows and shrinks when you change surface temperature or dewpoint."
+    />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect fill='%237a2033' width='16' height='16' rx='2'/%3E%3Cpath fill='%23f3eee3' d='M3 12 L8 4 L13 12 Z'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="css/app.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand">
+        <span class="eyebrow">Union College · GEO 114 Extreme Weather</span>
+        <h1>CAPE on a Skew-T</h1>
+      </div>
+      <p class="lede">
+        CAPE is the orange area between a lifted surface parcel and the environment.
+        Change surface T or Td and watch that area grow or shrink. The number is just a size tag.
+      </p>
+    </header>
+
+    <main class="layout">
+      <section class="chart-wrap" aria-label="Skew-T diagram">
+        <div class="chart-toolbar">
+          <h2>Skew-T · log p</h2>
+          <span class="badge" id="lockBadge">Environment locked</span>
+        </div>
+        <div class="chart-stage">
+          <canvas id="skewt" width="720" height="820" role="img" aria-label="Skew-T diagram with CAPE and CIN shaded"></canvas>
+          <div class="readout" id="cursorReadout"></div>
+        </div>
+        <div class="legend">
+          <span><i class="swatch temp"></i>environment T</span>
+          <span><i class="swatch dew"></i>dewpoint</span>
+          <span><i class="swatch parcel"></i>lifted parcel</span>
+          <span><i class="swatch cape"></i>CAPE (positive area)</span>
+          <span><i class="swatch cin"></i>CIN (negative area)</span>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <section>
+          <h2>Sounding</h2>
+          <p class="sounding-title" id="soundingTitle">—</p>
+          <p class="blurb" id="soundingBlurb"></p>
+          <div class="example-row" role="group" aria-label="Built-in examples">
+            <button type="button" id="btnHighCape" class="active">High-CAPE Plains</button>
+            <button type="button" id="btnCapped">Capped morning</button>
+            <button type="button" id="btnResetParcel">Reset parcel</button>
+          </div>
+        </section>
+
+        <section>
+          <h3>Surface parcel</h3>
+          <p class="locked-note">
+            You are changing the <strong>surface parcel</strong> only. The red and green
+            environmental traces stay put — afternoon heating and moisture without rewriting the balloon.
+          </p>
+
+          <div class="slider-block">
+            <label for="tSlider">T</label>
+            <input id="tSlider" type="range" min="5" max="42" step="0.1" />
+            <div class="value-box">
+              <button type="button" class="step" id="tDown" aria-label="cooler by 0.5 °C">−</button>
+              <output id="tOut" for="tSlider">—</output>
+              <button type="button" class="step" id="tUp" aria-label="warmer by 0.5 °C">+</button>
+            </div>
+            <p class="hint">Warming shifts the dry adiabat to the right. The orange area usually grows.</p>
+          </div>
+
+          <div class="slider-block">
+            <label for="tdSlider">Td</label>
+            <input id="tdSlider" type="range" min="-5" max="32" step="0.1" />
+            <div class="value-box">
+              <button type="button" class="step" id="tdDown" aria-label="drier by 0.5 °C">−</button>
+              <output id="tdOut" for="tdSlider">—</output>
+              <button type="button" class="step" id="tdUp" aria-label="moister by 0.5 °C">+</button>
+            </div>
+            <p class="hint">Raising dewpoint lowers the LCL and warms the moist adiabat. Td cannot exceed T.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="toggle-row">
+            <h3>Predict first</h3>
+            <label class="switch">
+              <input type="checkbox" id="predictToggle" checked />
+              lab mode
+            </label>
+          </div>
+          <div class="predict-card" id="predictCard">
+            <p id="predictPrompt">
+              Look at the orange (CAPE) and blue (CIN) areas. Do not peek at the number yet.
+              What kind of CAPE is this?
+            </p>
+            <div class="choices" id="predictChoices"></div>
+            <button type="button" class="primary" id="revealBtn">Reveal CAPE / CIN</button>
+            <p class="status" id="predictFeedback"></p>
+          </div>
+        </section>
+
+        <section>
+          <div class="metrics">
+            <div class="metric cape-metric">
+              <div class="k">CAPE</div>
+              <div class="v" id="capeVal">???</div>
+              <div class="sub" id="capeCat">hidden until you predict</div>
+            </div>
+            <div class="metric cin-metric">
+              <div class="k">CIN</div>
+              <div class="v" id="cinVal">???</div>
+              <div class="sub" id="wmaxVal">theoretical max updraft hidden</div>
+            </div>
+          </div>
+          <div class="scale" aria-hidden="true"><div class="scale-pointer" id="scalePointer"></div></div>
+          <div class="scale-labels"><span>0</span><span>weak</span><span>moderate</span><span>strong</span><span>extreme</span></div>
+          <ul class="levels">
+            <li>LCL <span id="lclVal">—</span></li>
+            <li>LFC <span id="lfcVal">—</span></li>
+            <li>EL <span id="elVal">—</span></li>
+          </ul>
+        </section>
+
+        <details id="loadBox">
+          <summary>Load a real sounding</summary>
+          <p class="blurb">
+            Paste is the reliable classroom path. Station+date fetch from the University of Wyoming
+            archive is attempted; most browsers block it (CORS). If fetch fails, the app gives you
+            the URL so you can copy the Text:List page.
+          </p>
+
+          <h3>Paste UWYO text</h3>
+          <label class="visually-hidden" for="pasteBox">University of Wyoming sounding text</label>
+          <textarea id="pasteBox" placeholder="Paste a UWYO Text:List sounding here (PRES  HGHT  TEMP  DWPT …)"></textarea>
+          <div class="example-row">
+            <button type="button" class="primary" id="btnPaste">Plot pasted sounding</button>
+            <button type="button" id="btnSamplePaste">Insert sample text</button>
+          </div>
+
+          <h3>Fetch by station + time</h3>
+          <div class="form-grid">
+            <label>
+              Station
+              <input id="stnInput" type="text" list="stnList" value="OUN" autocomplete="off" />
+            </label>
+            <label>
+              Hour (UTC)
+              <select id="hourInput">
+                <option value="00">00Z</option>
+                <option value="12">12Z</option>
+                <option value="18">18Z</option>
+              </select>
+            </label>
+            <label>
+              Date
+              <input id="dateInput" type="date" value="2011-05-24" />
+            </label>
+            <label>
+              &nbsp;
+              <button type="button" class="primary" id="btnFetch">Fetch from UWYO</button>
+            </label>
+          </div>
+          <datalist id="stnList"></datalist>
+          <p class="status" id="loadStatus"></p>
+          <p class="blurb">
+            Nearby for Union: <strong>ALB 72518</strong> (Albany). Classic Plains: <strong>OUN 72357</strong>.
+            Open
+            <a href="https://weather.uwyo.edu/upperair/sounding.html" target="_blank" rel="noopener">weather.uwyo.edu/upperair/sounding.html</a>,
+            choose <em>Type of plot: Text: List</em>, then paste.
+          </p>
+        </details>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      Teaching tool for Union GEO 114. Surface-based CAPE with a dry adiabat to the LCL and a liquid
+      pseudoadiabat above. Approximations and how to run locally are in
+      <a href="README.md">README.md</a> · lab beats in <a href="Lab4-notes.md">Lab4-notes.md</a>.
+    </footer>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
