@@ -38,18 +38,18 @@
 
       <aside class="panel" id="labPanel" aria-label="Lab steps">
         <header class="wizard-head">
-          <h2 class="progress-label" id="stepTitle">1 Orient</h2>
+          <h2 class="progress-label" id="stepTitle">1 Look around</h2>
           <ol class="dots" id="progressDots" aria-label="Lab steps"></ol>
         </header>
 
         <div class="step-scroll" id="stepScroll">
           <section class="prompt-block" data-block="ask">
-            <h3>Ask</h3>
+            <h3>Think about this</h3>
             <p class="ask" id="stepAsk" tabindex="-1"></p>
           </section>
 
           <section class="prompt-block" data-block="evidence">
-            <h3>Evidence</h3>
+            <h3>Do this</h3>
             <ol class="evidence-list" id="stepEvidence"></ol>
           </section>
 
@@ -174,13 +174,13 @@
           </section>
 
           <section class="prompt-block" data-block="claim" hidden>
-            <h3>Claim</h3>
+            <h3>Write it down</h3>
             <p id="stepClaim"></p>
-            <label class="visually-hidden" for="claimBox">Claim notes</label>
+            <label class="visually-hidden" for="claimBox">Your notes</label>
             <textarea
               id="claimBox"
               rows="2"
-              placeholder="Write here…"
+              placeholder="A sentence or two is fine…"
             ></textarea>
           </section>
         </div>
