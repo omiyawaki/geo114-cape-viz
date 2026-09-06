@@ -13,6 +13,8 @@ import {
   moistAdiabatFrom,
   cToK,
   kToC,
+  splitContiguousBands,
+  bandLensRing,
 } from "./thermo.js";
 
 const P_BOT = 1050;
@@ -130,29 +132,31 @@ function lineAtP(ctx, pArr, tArr, L, color, width, dash) {
   ctx.restore();
 }
 
-function fillBand(ctx, band, L, fill, stroke) {
-  if (!band.length) return;
+function fillLens(ctx, segment, L, fill, stroke) {
+  const ring = bandLensRing(segment);
+  if (ring.length < 4) return;
   ctx.save();
   ctx.beginPath();
-  const first = band[0];
-  ctx.moveTo(xOfTP(first.tP0, first.p0, L), yOfP(first.p0, L));
-  for (const s of band) {
-    ctx.lineTo(xOfTP(s.tP1, s.p1, L), yOfP(s.p1, L));
+  ctx.moveTo(xOfTP(ring[0].t, ring[0].p, L), yOfP(ring[0].p, L));
+  for (let i = 1; i < ring.length; i++) {
+    ctx.lineTo(xOfTP(ring[i].t, ring[i].p, L), yOfP(ring[i].p, L));
   }
-  for (let i = band.length - 1; i >= 0; i--) {
-    const s = band[i];
-    ctx.lineTo(xOfTP(s.tE1, s.p1, L), yOfP(s.p1, L));
-  }
-  ctx.lineTo(xOfTP(first.tE0, first.p0, L), yOfP(first.p0, L));
   ctx.closePath();
   ctx.fillStyle = fill;
-  ctx.fill();
+  ctx.fill("evenodd");
   if (stroke) {
     ctx.strokeStyle = stroke;
     ctx.lineWidth = 0.6;
     ctx.stroke();
   }
   ctx.restore();
+}
+
+function fillBand(ctx, band, L, fill, stroke) {
+  if (!band || !band.length) return;
+  for (const seg of splitContiguousBands(band)) {
+    fillLens(ctx, seg, L, fill, stroke);
+  }
 }
 
 function drawGrid(ctx, L) {

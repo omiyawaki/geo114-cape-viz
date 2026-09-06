@@ -172,6 +172,53 @@ export function capeCategory(cape) {
 }
 
 /**
+ * Break a CAPE/CIN band into contiguous pressure runs.
+ * Slices are omitted where buoyancy has the other sign, so a flat array can
+ * jump in pGrid; each jump starts a new polygon. Accepts a flat list or a
+ * list of runs (idempotent).
+ */
+export function splitContiguousBands(band) {
+  if (!band || band.length === 0) return [];
+  if (Array.isArray(band[0])) {
+    const out = [];
+    for (const run of band) {
+      if (Array.isArray(run) && run.length) out.push(...splitContiguousBands(run));
+    }
+    return out;
+  }
+  const segs = [];
+  let cur = [band[0]];
+  for (let i = 1; i < band.length; i++) {
+    const prev = cur[cur.length - 1];
+    if (Math.abs(band[i].p0 - prev.p1) <= 0.05) cur.push(band[i]);
+    else {
+      segs.push(cur);
+      cur = [band[i]];
+    }
+  }
+  segs.push(cur);
+  return segs;
+}
+
+/**
+ * Closed (t, p) ring for the lens between parcel T and env T.
+ * Colder side bottom→top, warmer side top→bottom, so the interior is always
+ * the region between the two curves (not the exterior, even when the parcel
+ * is to the left of the environment).
+ */
+export function bandLensRing(segment) {
+  if (!segment || !segment.length) return [];
+  const pts = [{ tP: segment[0].tP0, tE: segment[0].tE0, p: segment[0].p0 }];
+  for (const s of segment) pts.push({ tP: s.tP1, tE: s.tE1, p: s.p1 });
+  const ring = [];
+  for (const v of pts) ring.push({ t: Math.min(v.tP, v.tE), p: v.p });
+  for (let i = pts.length - 1; i >= 0; i--) {
+    ring.push({ t: Math.max(pts[i].tP, pts[i].tE), p: pts[i].p });
+  }
+  return ring;
+}
+
+/**
  * Surface-based parcel lift and CAPE/CIN.
  *
  * @param {object} sounding  { levels: [{p, z, t, td}, ...] } p decreasing
@@ -305,6 +352,7 @@ export function liftSurfaceParcel(sounding, tSfcC, tdSfcC) {
       tP1: tParcel[i + 1],
       tE0: tEnvironment[i],
       tE1: tEnvironment[i + 1],
+      bMid,
     };
 
     if (pLfc != null && pEl != null && pMid <= pLfc && pMid >= pEl && bMid > 0) {
@@ -313,6 +361,9 @@ export function liftSurfaceParcel(sounding, tSfcC, tdSfcC) {
     }
     if ((pLfc == null || pMid >= pLfc) && bMid < 0) {
       cin += -dE;
+      cinBand.push(pt);
+    } else if (pLfc != null && pEl != null && pMid < pLfc && pMid >= pEl && bMid < 0) {
+      // Stable pocket above the LFC: shade as CIN, do not add to the sfc→LFC integral.
       cinBand.push(pt);
     }
   }
@@ -342,11 +393,12 @@ export function liftSurfaceParcel(sounding, tSfcC, tdSfcC) {
     category: capeCategory(cape),
     wmax: Math.sqrt(2 * cape), // m/s, undilute theoretical cap
     parcelPath,
-    capeBand,
-    cinBand,
+    capeBand: splitContiguousBands(capeBand),
+    cinBand: splitContiguousBands(cinBand),
     pGrid,
     tParcel,
     tEnvironment,
+    B,
   };
 }
 
