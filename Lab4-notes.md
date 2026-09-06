@@ -4,9 +4,19 @@
 
 CAPE is not a weather-app badge. It is a **region on a sounding**: the area where a lifted surface parcel is warmer than the air around it. This lab forces you to look at that area first, then attach a number.
 
-Use the static app in this repo (not a public skew-T site). Built-in soundings are enough for every beat except the last.
+Use the static app in this repo (not a public skew-T site). The app is a **7-step lab wizard**. The skew-T stays visible on every step; the right-hand panel (bottom on a phone) shows only the Ask / Evidence / Claim prompts and the controls for the **current** step. Built-in soundings are enough for every beat except the last.
 
-**Predict first** stays **on** unless your instructor says otherwise. The orange and blue fills stay visible; the J/kg values stay hidden until you commit.
+**Predict first** is always on. The orange and blue fills stay visible; the J/kg values stay hidden until you commit. Going back to an earlier step does not wipe your predictions.
+
+| App step | This document |
+|---|---|
+| Step 1 of 7 · Orient | Setup |
+| Step 2 of 7 · The orange area | Beat 1 |
+| Step 3 of 7 · Predict then reveal | Beat 2 |
+| Step 4 of 7 · Heat the surface | Beat 3 |
+| Step 5 of 7 · Dry the dewpoint | Beat 4 |
+| Step 6 of 7 · The cap | Beat 5 |
+| Step 7 of 7 · Paste a real sounding | Beat 6 |
 
 ---
 
@@ -22,23 +32,23 @@ After this lab you should be able to:
 
 ---
 
-## Setup (2 minutes)
+## Setup (2 minutes) — app Step 1 · Orient
 
-1. Open the app (local `python3 -m http.server` from the repo root, or the class GitHub Pages URL).
-2. Confirm the preloaded case is **High-CAPE Plains — Norman, OK 18Z 24 May 2011**.
-3. Confirm **Predict first / lab mode** is checked.
-4. Identify, without touching sliders:
+1. Open the app (local `python3 -m http.server` from the repo root, or the class GitHub Pages URL). It opens on **Step 1 of 7 · Orient**.
+2. Confirm the preloaded case is **High-CAPE Plains — Norman, OK 18Z 24 May 2011** (title above the chart).
+3. There are **no T / Td sliders** on this step. Tick the short checklist: point to orange, blue, and the dashed parcel.
+4. Identify:
    - red environmental temperature
    - green dewpoint
    - dashed lifted-parcel path
    - **orange fill (CAPE)** and **blue fill (CIN)**
    - labels **LCL**, **LFC**, **EL**
 
-The red and green lines are **locked**. Sliders only change the surface parcel you lift.
+The red and green lines are **locked**. Later steps unlock sliders that change only the surface parcel you lift. Use **Next** (or the dots) to move; **Previous** jumps back without wiping your notes.
 
 ---
 
-## Beat 1 — What is the orange area?
+## Beat 1 — What is the orange area? — app Step 2
 
 **Ask.** If you lift a surface air parcel, where on this diagram is it *positively buoyant*? Where is it fighting a cap?
 
@@ -52,9 +62,9 @@ The red and green lines are **locked**. Sliders only change the surface parcel y
 
 ---
 
-## Beat 2 — Predict the size, then reveal
+## Beat 2 — Predict the size, then reveal — app Step 3
 
-**Ask.** Looking only at the orange area, is this weak, moderate, or strong/extreme CAPE?
+**Ask.** Looking only at the orange area, is this weak, moderate, strong, or extreme CAPE?
 
 **Evidence.**
 
@@ -68,7 +78,9 @@ Instructor ballpark for the preloaded 18Z parcel: **strong**, about **3 × 10³ 
 
 ---
 
-## Beat 3 — Afternoon heating (T up, Td fixed)
+## Beat 3 — Afternoon heating (T up, Td fixed) — app Step 4
+
+The app unlocks the **T** slider only (Td stays locked). **Reset parcel** is available.
 
 **Ask.** If the ground heats 3 °C and dewpoint does not change, does the orange area grow, shrink, or stay put? Why?
 
@@ -85,7 +97,9 @@ Note the new CAPE and the Δ. Optional: \(\sqrt{2\,\mathrm{CAPE}}\) is an **undi
 
 ---
 
-## Beat 4 — Dry the boundary layer (Td down, T fixed)
+## Beat 4 — Dry the boundary layer (Td down, T fixed) — app Step 5
+
+The app unlocks **Td** only and starts from the original parcel (not the heated one from Beat 3). T stays locked.
 
 **Ask.** Reset the parcel, then drop dewpoint by 5 °C. What happens to LCL, to the moist adiabat, and to the orange vs. blue areas?
 
@@ -100,13 +114,15 @@ Note the new CAPE and the Δ. Optional: \(\sqrt{2\,\mathrm{CAPE}}\) is an **undi
 
 ---
 
-## Beat 5 — The cap (same day, 12Z)
+## Beat 5 — The cap (same day, 12Z) — app Step 6
 
-**Ask.** Switch to **Capped morning**. Why can a sounding have *both* a large orange region aloft *and* a blue cap? What does +6 °C of surface heating do to that blue area?
+The app **switches** to **Capped morning** (OUN 12Z). Paste stays hidden. Heat T (+6 °C); Td stays locked. Both the orange CAPE and blue CIN story are on screen.
+
+**Ask.** Why can a sounding have *both* a large orange region aloft *and* a blue cap? What does +6 °C of surface heating do to that blue area?
 
 **Evidence.**
 
-1. Load **Capped morning** (OUN 12Z 24 May 2011). Do not peek at numbers first.
+1. Step 6 already loaded **Capped morning** (OUN 12Z 24 May 2011). Do not peek at numbers first.
 2. Sketch: where is the inversion / elevated mixed layer (environmental T jogs warm around 850–800 hPa)?
 3. Predict whether 12Z CAPE is weaker than 18Z, and whether CIN is larger.
 4. Reveal.
@@ -118,7 +134,9 @@ Instructor ballpark: 12Z surface-based CAPE moderate (~1500 J/kg) with CIN of a 
 
 ---
 
-## Beat 6 — A real sounding (paste)
+## Beat 6 — A real sounding (paste) — app Step 7
+
+Paste, fetch, and **Insert sample text** unlock only on this last step. Optional T tweak. **Reload Norman 18Z** puts the High-CAPE Plains case back for comparison.
 
 **Ask.** Does Albany (or another assigned station) today / on a chosen severe-weather date look like Norman on 24 May 2011?
 
@@ -152,7 +170,8 @@ Include:
 ## Instructor notes
 
 - Core exercise is offline once the repo is served. Wyoming is only for Beat 6.
-- Predict-first hides **numbers**, not fills. If a student toggles lab mode off, ask them to toggle it back.
+- Predict-first hides **numbers**, not fills. There is no lab-mode toggle — numbers stay hidden until Reveal on that step.
+- The wizard omits controls that are not part of the current beat (no grayed-out sliders). Paste exists only on Step 7.
 - Surface-based CAPE here vs. UWYO mixed-layer CAPE: document the difference rather than chasing the archive’s index line.
 - If someone pastes a GIF URL or an HTML weather blog, the parser will fail until they paste **PRES / TEMP / DWPT** columns.
 - Common misconception: moving T “rewrites the balloon.” The badge **Environment locked** is the correction.

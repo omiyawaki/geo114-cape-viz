@@ -89,9 +89,9 @@ code,
 
 .lede {
   margin: 0;
-  max-width: 36rem;
+  max-width: 34rem;
   color: #d8d2c6;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
 }
 
 .layout {
@@ -121,10 +121,19 @@ code,
 .chart-toolbar {
   display: flex;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: 0.55rem 0.75rem;
   align-items: center;
   padding: 0.7rem 0.9rem 0.35rem;
   flex-wrap: wrap;
+}
+
+.chart-sounding {
+  margin: 0;
+  flex: 1;
+  min-width: 12rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-weight: 650;
 }
 
 .chart-toolbar h2 {
@@ -217,17 +226,18 @@ code,
   border: 1px solid var(--rule);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 0.9rem 1rem 1.1rem;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.95rem;
+  min-height: 0;
   max-height: calc(100vh - 7rem);
-  overflow: auto;
+  overflow: hidden;
 }
 
 @media (max-width: 980px) {
   .panel {
     max-height: none;
+    overflow: visible;
   }
   .chart-stage {
     min-height: 70vh;
@@ -534,6 +544,10 @@ textarea {
   resize: vertical;
 }
 
+[data-block="paste"] textarea {
+  min-height: 6.2rem;
+}
+
 .status {
   font-size: 0.85rem;
   margin: 0.4rem 0 0;
@@ -560,4 +574,167 @@ textarea {
   height: 1px;
   overflow: hidden;
   clip: rect(0 0 0 0);
+}
+
+/* —— Lab wizard —— */
+
+.wizard-head {
+  padding: 0.8rem 1rem 0.65rem;
+  border-bottom: 1px solid var(--rule);
+  background: #fbf7ef;
+  flex-shrink: 0;
+}
+
+.progress-label {
+  font-family: var(--display);
+  font-size: 1.08rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--navy);
+}
+
+.dots {
+  display: flex;
+  gap: 0.32rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.45rem 0 0;
+  flex-wrap: wrap;
+}
+
+.dots button {
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 999px;
+  padding: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+  background: #fff;
+  color: var(--muted);
+}
+
+.dots button.visited {
+  background: #e8dfcf;
+  color: var(--navy);
+  border-color: #c9beab;
+}
+
+.dots button.current {
+  background: var(--garnet);
+  color: #fff;
+  border-color: var(--garnet-dark);
+}
+
+.step-scroll {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: auto;
+  padding: 0.85rem 1rem 1.05rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.ask {
+  background: #f3ead8;
+  border-left: 3px solid var(--garnet);
+  padding: 0.55rem 0.7rem;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.ask:focus {
+  outline: none;
+}
+
+.prompt-block h3 {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--garnet-dark);
+  margin: 0 0 0.25rem;
+}
+
+.prompt-block p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.prompt-block textarea {
+  margin-top: 0.45rem;
+  min-height: 4.6rem;
+  font-size: 0.85rem;
+  font-family: var(--font);
+}
+
+.checklist {
+  list-style: none;
+  margin: 0.15rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.28rem;
+}
+
+.checklist label {
+  display: flex;
+  gap: 0.45rem;
+  align-items: flex-start;
+  font-size: 0.9rem;
+}
+
+.checklist input {
+  margin-top: 0.2rem;
+}
+
+.delta,
+.locked-other {
+  margin: 0.2rem 0 0.15rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--navy);
+}
+
+.locked-other {
+  color: var(--muted);
+}
+
+.wizard-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem 0.85rem;
+  border-top: 1px solid var(--rule);
+  background: #fbf7ef;
+  flex-shrink: 0;
+}
+
+.wizard-nav button {
+  min-width: 7.2rem;
+}
+
+.wizard-nav button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 980px) {
+  .step-scroll {
+    flex: none;
+    min-height: unset;
+    overflow: visible;
+    padding-bottom: 4.2rem;
+  }
+  .wizard-nav {
+    position: sticky;
+    bottom: 0;
+  }
+  .layout {
+    padding-bottom: 0.4rem;
+  }
 }

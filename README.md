@@ -4,6 +4,8 @@ Pedagogical CAPE / skew-T visualizer for **Union College GEO 114 Extreme Weather
 
 Students should **see CAPE as a filled positive area** on a skew-T that grows or shrinks when they change surface temperature or dewpoint. The J/kg number is a size tag, not the lesson.
 
+The app is a **7-step lab wizard** that maps 1:1 onto [Lab4-notes.md](Lab4-notes.md) (Setup + six beats). The skew-T stays visible; the right-hand panel (bottom on mobile) shows only the Ask / Evidence / Claim prompts and the controls for the current step. Prev / Next and progress dots move between steps without wiping student predictions.
+
 The core exercise runs entirely in this static app. No third-party skew-T site is required.
 
 ## Run locally
@@ -30,14 +32,24 @@ Pages serves `.js` with the right MIME type, so ES modules work. Fetching Wyomin
 
 ## What the app does
 
-| Control | Effect |
+The wizard reveals controls only when the beat needs them. Nothing is grayed out and left in the way.
+
+| Step | What is on screen |
 |---|---|
-| Preloaded **High-CAPE Plains** | Norman, OK (OUN) 18Z 24 May 2011. Fat orange area, almost no CIN. |
-| **Capped morning** | Same day, 12Z. Blue CIN under a cap; heat T and watch CIN vanish. |
-| Surface **T** / **Td** sliders and ±0.5 °C steppers | Lift a *modified surface parcel*. Red T and green Td traces stay locked. |
-| **Predict first** (on by default) | Hides CAPE/CIN numbers until the student commits to a qualitative call. Shaded areas stay visible. |
-| **Paste UWYO text** | Required path for real soundings. |
-| **Station + date + hour fetch** | Tries `weather.uwyo.edu`. If CORS blocks it, the app opens the URL so you can copy/paste. |
+| 1 · Orient | High-CAPE Plains loaded. Checklist (orange, blue, dashed parcel). No sliders. |
+| 2 · The orange area | CAPE/CIN as areas. Claim prompt. Still no sliders. |
+| 3 · Predict then reveal | Weak / moderate / strong / extreme + Reveal. Numbers stay hidden until then. |
+| 4 · Heat the surface | **T** slider only (Td locked). Predict grow/shrink, then +3 °C. Reset parcel. |
+| 5 · Dry the dewpoint | **Td** slider only, starting from the original parcel. −5 °C Td; CIN can appear. |
+| 6 · The cap | Auto-switches to Capped morning (12Z). T heating (+6 °C). Paste hidden. |
+| 7 · Paste a real sounding | Paste / fetch / sample-insert unlock. Optional T tweak. Reload Norman 18Z to compare. |
+
+| Always | Effect |
+|---|---|
+| Skew-T canvas | Environment traces locked. Orange CAPE and blue CIN fills update live when T/Td change. |
+| Predict first | Hides CAPE/CIN **numbers** until Reveal. Shaded areas stay visible. |
+| Surface **T** / **Td** (when unlocked) | Lift a *modified surface parcel*. ±0.5 °C steppers. |
+| **Station + date + hour fetch** (step 7) | Tries `weather.uwyo.edu`. If CORS blocks it, the app opens the URL so you can copy/paste. |
 
 Nearby sounding for Union: **ALB 72518** (Albany, NY).
 
@@ -144,14 +156,14 @@ css/app.css
 js/thermo.js        parcel, LCL, moist adiabat, CAPE/CIN
 js/skewt.js         skew-T drawing
 js/soundings.js     examples, UWYO parser, fetch
-js/app.js           sliders, predict-first, load UI
+js/app.js           7-step wizard, predict-first, load UI
 examples/           sample UWYO text
 Lab4-notes.md       Ask → evidence → Claim beats
 ```
 
 ## Lab
 
-See [Lab4-notes.md](Lab4-notes.md) for GEO 114 beats. Instructors: leave **Predict first** on.
+See [Lab4-notes.md](Lab4-notes.md) for GEO 114 beats. The on-screen steps are those beats. Instructors: predict-first is locked on (no toggle).
 
 ## Data credit
 
