@@ -33,10 +33,14 @@ const STEPS = [
   {
     id: "orient",
     title: "Look around",
-    ask: "Before you touch any of the controls, take a minute with the skew-T. Where is the orange fill? Where is the blue fill (if there is any)? Which line is the dashed parcel?",
-    evidence: [],
-    claim: "",
-    show: { checklist: true, claim: false, predict: false, t: false, td: false, reset: false, metrics: false, paste: false },
+    ask: "Before you touch any of the controls, pause and recall — in plain words — what CAPE is, what CIN is, and what a lifted parcel is. Then look at the skew-T and map each idea onto the plot: which fill or line is which?",
+    evidence: [
+      "Check off each item below once you can point to it on the chart.",
+      "If blue fill is missing on this sounding, that is fine — CIN can be near zero.",
+      "Do not move any sliders yet; this step is just connecting the words to the picture.",
+    ],
+    claim: "In your own words: what is CAPE? what is CIN? what does the dashed line represent? Then note where each shows up on this plot.",
+    show: { checklist: true, claim: true, predict: false, t: false, td: false, reset: false, metrics: false, paste: false },
     sounding: "highCape",
     slot: "plains",
     predictMode: "initial",
