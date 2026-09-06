@@ -3,30 +3,23 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CAPE on a Skew-T · Union GEO 114 Extreme Weather</title>
+    <title>CAPE</title>
     <meta
       name="description"
-      content="Stepped GEO 114 lab: see CAPE as a filled positive area on a skew-T, then heat, dry, and break a cap."
+      content="Point to CAPE on a skew-T, then heat, dry, and break a cap."
     />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect fill='%237a2033' width='16' height='16' rx='2'/%3E%3Cpath fill='%23f3eee3' d='M3 12 L8 4 L13 12 Z'/%3E%3C/svg%3E" />
     <link rel="stylesheet" href="css/app.css" />
   </head>
   <body>
     <header class="app-header">
-      <div class="brand">
-        <span class="eyebrow">Union College · GEO 114 Extreme Weather</span>
-        <h1>CAPE on a Skew-T</h1>
-      </div>
-      <p class="lede">
-        Seven lab steps. The skew-T stays on the left; this panel shows only the current beat.
-        CAPE is the orange area — the number is a size tag.
-      </p>
+      <h1>CAPE</h1>
     </header>
 
     <main class="layout">
       <section class="chart-wrap" aria-label="Skew-T diagram">
         <div class="chart-toolbar">
-          <h2>Skew-T · log p</h2>
+          <h2>Skew-T</h2>
           <p class="chart-sounding" id="chartSounding">—</p>
           <span class="badge" id="lockBadge">Environment locked</span>
         </div>
@@ -38,46 +31,49 @@
           <span><i class="swatch temp"></i>environment T</span>
           <span><i class="swatch dew"></i>dewpoint</span>
           <span><i class="swatch parcel"></i>lifted parcel</span>
-          <span><i class="swatch cape"></i>CAPE (positive area)</span>
-          <span><i class="swatch cin"></i>CIN (negative area)</span>
+          <span><i class="swatch cape"></i>CAPE</span>
+          <span><i class="swatch cin"></i>CIN</span>
         </div>
       </section>
 
-      <aside class="panel" id="labPanel" aria-label="Lab wizard">
+      <aside class="panel" id="labPanel" aria-label="Lab steps">
         <header class="wizard-head">
-          <h2 class="progress-label" id="stepTitle">Step 1 of 7 · Orient</h2>
+          <h2 class="progress-label" id="stepTitle">1 Orient</h2>
           <ol class="dots" id="progressDots" aria-label="Lab steps"></ol>
         </header>
 
         <div class="step-scroll" id="stepScroll">
-          <p class="ask" id="stepAsk" tabindex="-1"></p>
+          <section class="prompt-block" data-block="ask">
+            <h3>Ask</h3>
+            <p class="ask" id="stepAsk" tabindex="-1"></p>
+          </section>
 
           <section class="prompt-block" data-block="evidence">
             <h3>Evidence</h3>
-            <p id="stepEvidence"></p>
+            <ol class="evidence-list" id="stepEvidence"></ol>
           </section>
 
           <section class="prompt-block" data-block="checklist">
             <h3>Point to these</h3>
             <ul class="checklist" id="orientChecklist">
-              <li><label><input type="checkbox" /> orange fill (CAPE)</label></li>
-              <li><label><input type="checkbox" /> blue fill (CIN) — maybe a sliver, or none</label></li>
-              <li><label><input type="checkbox" /> dashed lifted parcel</label></li>
-              <li><label><input type="checkbox" /> red environmental T · green Td</label></li>
-              <li><label><input type="checkbox" /> LCL · LFC · EL labels</label></li>
+              <li><label><input type="checkbox" /> orange fill</label></li>
+              <li><label><input type="checkbox" /> blue fill (maybe none)</label></li>
+              <li><label><input type="checkbox" /> dashed parcel</label></li>
+              <li><label><input type="checkbox" /> red T · green Td</label></li>
+              <li><label><input type="checkbox" /> LCL · LFC · EL</label></li>
             </ul>
           </section>
 
           <section data-block="paste" id="loadBox" hidden>
-            <h3>Load a real sounding</h3>
+            <h3>Paste a sounding</h3>
             <p class="blurb">
-              Paste is the classroom path. Fetch often hits CORS — if it fails, the app opens the
-              Wyoming URL so you can copy Text:List.
+              Go to
+              <a href="https://weather.uwyo.edu/upperair/sounding.html" target="_blank" rel="noopener">weather.uwyo.edu/upperair/sounding.html</a>.
+              Type of plot: <em>Text: List</em>. Copy the listing. Paste it here.
             </p>
 
-            <h3>Paste UWYO text</h3>
             <label class="visually-hidden" for="pasteBox">University of Wyoming sounding text</label>
-            <textarea id="pasteBox" placeholder="Paste a UWYO Text:List sounding here (PRES  HGHT  TEMP  DWPT …)"></textarea>
+            <textarea id="pasteBox" placeholder="PRES  HGHT  TEMP  DWPT …"></textarea>
             <div class="example-row">
               <button type="button" class="primary" id="btnPaste">Plot pasted sounding</button>
               <button type="button" id="btnSamplePaste">Insert sample text</button>
@@ -110,10 +106,8 @@
             <datalist id="stnList"></datalist>
             <p class="status" id="loadStatus"></p>
             <p class="blurb">
-              Nearby for Union: <strong>ALB 72518</strong> (Albany). Classic Plains: <strong>OUN 72357</strong>.
-              Open
-              <a href="https://weather.uwyo.edu/upperair/sounding.html" target="_blank" rel="noopener">weather.uwyo.edu/upperair/sounding.html</a>,
-              choose <em>Type of plot: Text: List</em>, then paste.
+              Nearby: <strong>ALB 72518</strong> (Albany). Plains: <strong>OUN 72357</strong>.
+              If fetch fails, paste.
             </p>
           </section>
 
@@ -138,7 +132,7 @@
                 <output id="tOut" for="tSlider">—</output>
                 <button type="button" class="step" id="tUp" aria-label="warmer by 0.5 °C">+</button>
               </div>
-              <p class="hint" id="tHint">Each ± is 0.5 °C. Environment traces stay put.</p>
+              <p class="hint" id="tHint">Each ± is 0.5 °C.</p>
             </div>
 
             <div class="slider-block" data-block="tdSlider">
@@ -149,7 +143,7 @@
                 <output id="tdOut" for="tdSlider">—</output>
                 <button type="button" class="step" id="tdUp" aria-label="moister by 0.5 °C">+</button>
               </div>
-              <p class="hint">Td cannot exceed T (RH ≤ 100%).</p>
+              <p class="hint">Td cannot exceed T.</p>
             </div>
 
             <div class="example-row" data-block="reset">
@@ -167,7 +161,7 @@
               <div class="metric cin-metric">
                 <div class="k">CIN</div>
                 <div class="v" id="cinVal">???</div>
-                <div class="sub" id="wmaxVal">theoretical max updraft hidden</div>
+                <div class="sub" id="wmaxVal">hidden until you predict</div>
               </div>
             </div>
             <div class="scale" aria-hidden="true"><div class="scale-pointer" id="scalePointer"></div></div>
@@ -186,23 +180,20 @@
             <textarea
               id="claimBox"
               rows="2"
-              placeholder="Write the claim in your lab sheet — jot a phrase here if you want."
+              placeholder="Write here…"
             ></textarea>
           </section>
         </div>
 
         <nav class="wizard-nav" aria-label="Step navigation">
-          <button type="button" id="btnPrev" disabled>Previous</button>
+          <button type="button" id="btnPrev" disabled>Prev</button>
           <button type="button" class="primary" id="btnNext">Next</button>
         </nav>
       </aside>
     </main>
 
     <footer class="footer">
-      Teaching tool for Union GEO 114. Seven steps map onto
-      <a href="Lab4-notes.md">Lab4-notes.md</a>. Surface-based CAPE with a dry adiabat to the LCL and a liquid
-      pseudoadiabat above. Approximations and how to run locally are in
-      <a href="README.md">README.md</a>.
+      <a href="Lab4-notes.md">Lab notes</a>
     </footer>
 
     <script type="module" src="js/app.js"></script>

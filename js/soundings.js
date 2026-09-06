@@ -115,7 +115,7 @@ export function parseUwyoText(text) {
 
 /** Common teaching / CONUS WMO ids. Keys are uppercase call signs. */
 export const STATIONS = {
-  ALB: { wmo: "72518", name: "Albany, NY (near Union)" },
+  ALB: { wmo: "72518", name: "Albany, NY" },
   OKX: { wmo: "72501", name: "Upton / NYC, NY" },
   BUF: { wmo: "72528", name: "Buffalo, NY" },
   OUN: { wmo: "72357", name: "Norman, OK" },
@@ -383,7 +383,7 @@ export const EXAMPLES = {
     OUN_18Z_ROWS,
     {
       id: "highCape",
-      title: "High CAPE — Norman, OK 18Z 24 May 2011",
+      title: "Norman, OK 18Z 24 May 2011",
       blurb:
         "Late-day Great Plains sounding. Warm, moist surface air under steep mid-level lapse rates. Orange area should be large; CIN almost gone.",
       uwyoCape: 2885,
@@ -395,7 +395,7 @@ export const EXAMPLES = {
     OUN_12Z_ROWS,
     {
       id: "capped",
-      title: "Capped morning — Norman, OK 12Z 24 May 2011",
+      title: "Norman, OK 12Z 24 May 2011",
       blurb:
         "Same day, 12Z. An elevated mixed layer (the cap) sits above a cool moist boundary layer. Heat the surface T and watch CIN shrink and CAPE grow.",
       uwyoCape: 1812,

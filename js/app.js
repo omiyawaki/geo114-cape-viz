@@ -17,25 +17,24 @@ import {
 const $ = (id) => document.getElementById(id);
 
 const INITIAL_CHOICES = [
-  { id: "weak", label: "Weak — small orange sliver, or almost none" },
-  { id: "moderate", label: "Moderate — a clear orange area, not huge" },
-  { id: "strong", label: "Strong — a fat orange area LFC toward the tropopause" },
-  { id: "extreme", label: "Extreme — huge orange area, very deep and wide" },
+  { id: "weak", label: "Weak — small sliver, or almost none" },
+  { id: "moderate", label: "Moderate — a clear patch, not huge" },
+  { id: "strong", label: "Strong — fat, up toward the tropopause" },
+  { id: "extreme", label: "Extreme — huge, deep and wide" },
 ];
 
 const CHANGE_CHOICES = [
-  { id: "grow", label: "The orange area will grow (more CAPE)" },
-  { id: "shrink", label: "The orange area will shrink (less CAPE)" },
-  { id: "same", label: "Little change — area looks about the same" },
+  { id: "grow", label: "Grow" },
+  { id: "shrink", label: "Shrink" },
+  { id: "same", label: "Little change" },
 ];
 
 const STEPS = [
   {
     id: "orient",
     title: "Orient",
-    ask: "Identify the traces on this High-CAPE Plains sounding (Norman 18Z 24 May 2011). Sliders stay hidden — look, don’t edit.",
-    evidence:
-      "On the chart: red environmental T, green dewpoint, dashed lifted parcel, orange CAPE, blue CIN (maybe a sliver or none), and the LCL / LFC / EL labels.",
+    ask: "Before touching anything: where is the orange fill? the blue fill? the dashed parcel?",
+    evidence: [],
     claim: "",
     show: { checklist: true, claim: false, predict: false, t: false, td: false, reset: false, metrics: false, paste: false },
     sounding: "highCape",
@@ -44,12 +43,14 @@ const STEPS = [
   },
   {
     id: "orange",
-    title: "The orange area",
-    ask: "If you lift a surface air parcel, where on this diagram is it positively buoyant? Where is it fighting a cap?",
-    evidence:
-      "Follow the dashed parcel: dry adiabat to the LCL, then a moist adiabat. Orange fill sits between parcel and environment from LFC to EL. Blue fill (if any) is where the parcel is cooler than the environment below the LFC.",
-    claim:
-      "CAPE is the orange region of positive buoyancy; CIN is the blue region you must punch through to reach the LFC. Do not quote a number yet.",
+    title: "Orange",
+    ask: "If you lift a surface parcel, where is it warmer than the air around it? Where is it cooler?",
+    evidence: [
+      "Follow the dashed parcel to the LCL, then up.",
+      "Mark the orange fill. Mark the blue fill (if any).",
+      "Note LCL, LFC, EL.",
+    ],
+    claim: "Write here: what the orange area is. what the blue area is. No numbers yet.",
     show: { checklist: false, claim: true, predict: false, t: false, td: false, reset: false, metrics: false, paste: false },
     sounding: "highCape",
     slot: "plains",
@@ -57,11 +58,10 @@ const STEPS = [
   },
   {
     id: "predict",
-    title: "Predict then reveal",
-    ask: "Looking only at the orange area, is this weak, moderate, strong, or extreme CAPE?",
-    evidence:
-      "Choose one option, then Reveal CAPE / CIN. Compare your call to the number and to the NWS-style bins on the bar (weak < 1000, moderate 1000–2500, strong 2500–4000, extreme ≥ 4000 J/kg).",
-    claim: "One sentence: your prediction vs. the revealed value. If you missed, say what about the area you under- or over-read (thin vs. deep, LFC near the ground vs. high up).",
+    title: "Predict",
+    ask: "Looking only at the orange area: weak, moderate, strong, or extreme?",
+    evidence: ["Predict first.", "Reveal.", "Compare your call to the number."],
+    claim: "Write here: your call vs. the number. If you missed, what about the area did you misread?",
     show: { checklist: false, claim: true, predict: true, t: false, td: false, reset: false, metrics: true, paste: false },
     sounding: "highCape",
     slot: "plains",
@@ -69,59 +69,70 @@ const STEPS = [
   },
   {
     id: "heat",
-    title: "Heat the surface",
-    ask: "If the ground heats 3 °C and dewpoint does not change, does the orange area grow, shrink, or stay put? Why?",
-    evidence:
-      "Predict grow / shrink / little change first. Then step surface T up by 3.0 °C (± is 0.5 °C — six clicks). Environment traces must not move. Watch the dashed parcel and the orange fill, then Reveal.",
-    claim: "Heating at constant Td usually increases CAPE. Note the new number and the Δ.",
+    title: "Heat",
+    ask: "If the ground heats 3 °C and dewpoint stays put, does the orange area grow, shrink, or stay put?",
+    evidence: ["Predict: grow / shrink / little change.", "Raise T by 3 °C.", "Reveal."],
+    claim: "Write here: what the orange area did, and why.",
     show: { checklist: false, claim: true, predict: true, t: true, td: false, reset: true, metrics: true, paste: false },
     sounding: "highCape",
     slot: "plains",
     predictMode: "change",
     targetDT: 3,
-    parcelNote: "T only — Td is locked. You are heating the surface parcel, not rewriting the balloon.",
+    parcelNote: "T only. Td stays put.",
   },
   {
     id: "dry",
-    title: "Dry the dewpoint",
-    ask: "This step starts from the original parcel (Reset if you still see the heated one). Drop dewpoint by 5 °C. What happens to LCL, the moist adiabat, and the orange vs. blue areas?",
-    evidence:
-      "Lower Td 5 °C (± is 0.5 °C — ten clicks of −). Td cannot exceed T. Watch for a blue CIN bite, then Reveal.",
-    claim: "Lower Td raises the LCL and cools the moist adiabat. CAPE should crash; CIN may appear. Moisture is the fuel.",
+    title: "Dry",
+    ask: "Reset, then drop dewpoint by 5 °C. What happens to the orange area? the blue area? LCL?",
+    evidence: [
+      "Reset parcel.",
+      "Predict: grow / shrink / little change.",
+      "Lower Td by 5 °C.",
+      "Reveal.",
+    ],
+    claim: "Write here: what drying did to the orange and blue areas.",
     show: { checklist: false, claim: true, predict: true, t: false, td: true, reset: true, metrics: true, paste: false },
     sounding: "highCape",
     slot: "dry",
     predictMode: "change",
     resetOnFirstEnter: true,
     targetDTd: -5,
-    parcelNote: "Td only — T is locked. Dry the boundary layer and watch CIN appear.",
+    parcelNote: "Td only. T stays put.",
   },
   {
     id: "cap",
-    title: "The cap",
-    ask: "Why can a sounding have both a large orange region aloft and a blue cap? What does +6 °C of surface heating do to that blue area?",
-    evidence:
-      "Loaded: Capped morning (OUN 12Z 24 May 2011). Find the inversion near 850–800 hPa. Predict 12Z CAPE/CIN, Reveal, then heat T +6 °C holding Td (twelve clicks of +).",
-    claim: "The cap is CIN. Heating can erode it until the orange area opens to the ground — breaking the cap.",
+    title: "Cap",
+    ask: "Orange aloft, blue below — why both? What does +6 °C of surface heating do to the blue area?",
+    evidence: [
+      "Find the warm jog in T near 850–800 hPa.",
+      "Predict, then Reveal.",
+      "Predict what +6 °C does to the blue fill.",
+      "Raise T by 6 °C. Reveal.",
+    ],
+    claim: "Write here: what the blue area is, and what heating did to it.",
     show: { checklist: false, claim: true, predict: true, t: true, td: false, reset: true, metrics: true, paste: false },
     sounding: "capped",
     slot: "capped",
     predictMode: "initial",
     targetDT: 6,
-    parcelNote: "T only — heat the 12Z surface and watch the blue cap shrink. Td stays put.",
+    parcelNote: "T only. Td stays put.",
   },
   {
     id: "paste",
-    title: "Paste a real sounding",
-    ask: "Does Albany (or another assigned station) today / on a chosen severe-weather date look like Norman on 24 May 2011?",
-    evidence:
-      "Paste a UWYO Text:List sounding (fetch is optional and often blocked by CORS). Predict CAPE from the area, then Reveal. Optional: tweak T as if it were 4 pm local. Reload Norman 18Z to compare.",
-    claim: "Compare area shape (fat and deep vs. skinny vs. missing) to the Norman 18Z case. Cite station, date, and hour.",
+    title: "Paste",
+    ask: "Does Albany (or the station you were given) look like Norman on 24 May 2011?",
+    evidence: [
+      "Go to weather.uwyo.edu/upperair/sounding.html.",
+      "Type of plot: Text: List. Station ALB (or yours). Copy the listing.",
+      "Paste. Plot.",
+      "Predict from the area, then Reveal.",
+    ],
+    claim: "Write here: fat and deep, skinny, or missing — vs. Norman 18Z. Station, date, hour.",
     show: { checklist: false, claim: true, predict: true, t: true, td: false, reset: true, metrics: true, paste: true },
     sounding: null,
     slot: "paste",
     predictMode: "initial",
-    parcelNote: "Optional T tweak after you load a sounding. Environment traces stay locked.",
+    parcelNote: "Optional: raise T as if it were 4 pm.",
   },
 ];
 
@@ -159,6 +170,16 @@ function stepMem(i) {
 function showBlock(name, on) {
   document.querySelectorAll(`[data-block="${name}"]`).forEach((el) => {
     el.hidden = !on;
+  });
+}
+
+function renderEvidence(items) {
+  const el = $("stepEvidence");
+  el.replaceChildren();
+  (items || []).forEach((text) => {
+    const li = document.createElement("li");
+    li.textContent = text;
+    el.append(li);
   });
 }
 
@@ -209,10 +230,7 @@ function setChoices(mode, selectedId) {
   box.innerHTML = items
     .map((c) => `<label><input type="radio" name="pred" value="${c.id}"/> ${c.label}</label>`)
     .join("");
-  $("predictPrompt").textContent =
-    mode === "change"
-      ? "Commit to grow / shrink / little change, then Reveal. The orange fill is the evidence; the number stays hidden."
-      : "Commit to a bin, then Reveal. The orange fill stays visible; the number does not.";
+  $("predictPrompt").textContent = "Predict first.";
   if (selectedId) {
     const el = box.querySelector(`input[name="pred"][value="${selectedId}"]`);
     if (el) el.checked = true;
@@ -323,7 +341,7 @@ function renderDots() {
   if (!ol.dataset.ready) {
     ol.innerHTML = STEPS.map(
       (s, i) =>
-        `<li><button type="button" data-step="${i}" title="${s.title}" aria-label="Step ${i + 1}: ${s.title}">${i + 1}</button></li>`
+        `<li><button type="button" data-step="${i}" title="${i + 1} ${s.title}" aria-label="${i + 1} ${s.title}">${i + 1}</button></li>`
     ).join("");
     ol.dataset.ready = "1";
     ol.addEventListener("click", (e) => {
@@ -380,9 +398,9 @@ function renderDelta() {
   }
 
   if (spec.targetDT != null) {
-    $("tHint").textContent = `Each ± is 0.5 °C. Aim ${signed(spec.targetDT)} from the original surface.`;
+    $("tHint").textContent = `Each ± is 0.5 °C. Aim ${signed(spec.targetDT)}.`;
   } else {
-    $("tHint").textContent = "Each ± is 0.5 °C. Environment traces stay put.";
+    $("tHint").textContent = "Each ± is 0.5 °C.";
   }
 }
 
@@ -392,19 +410,16 @@ function renderStep() {
   const n = state.step + 1;
   const sh = spec.show;
 
-  $("stepTitle").textContent = `Step ${n} of 7 · ${spec.title}`;
+  $("stepTitle").textContent = `${n} ${spec.title}`;
   $("labPanel").dataset.step = String(n);
   $("labPanel").dataset.stepId = spec.id;
 
-  $("stepAsk").replaceChildren();
-  const askLead = document.createElement("strong");
-  askLead.textContent = "Ask. ";
-  $("stepAsk").append(askLead, document.createTextNode(spec.ask));
-
-  $("stepEvidence").textContent = spec.evidence;
+  $("stepAsk").textContent = spec.ask;
+  renderEvidence(spec.evidence);
   $("stepClaim").textContent = spec.claim;
   $("claimBox").value = mem.claim || "";
 
+  showBlock("ask", true);
   showBlock("checklist", !!sh.checklist);
   showBlock("claim", !!sh.claim);
   showBlock("predict", !!sh.predict);
@@ -414,7 +429,7 @@ function renderStep() {
   showBlock("metrics", !!sh.metrics);
   showBlock("paste", !!sh.paste);
   showBlock("parcel", !!(sh.t || sh.td || sh.reset));
-  showBlock("evidence", true);
+  showBlock("evidence", !!(spec.evidence && spec.evidence.length));
 
   $("parcelNote").textContent = spec.parcelNote || "";
   $("parcelNote").hidden = !spec.parcelNote;
@@ -478,7 +493,7 @@ function renderMetrics() {
     $("cinVal").textContent = "???";
     $("cinVal").classList.add("hidden-val");
     $("capeCat").textContent = "hidden until you predict";
-    $("wmaxVal").textContent = "theoretical max updraft hidden";
+    $("wmaxVal").textContent = "hidden until you predict";
     $("scalePointer").style.left = "0%";
     $("scalePointer").style.opacity = "0.25";
   } else {
@@ -487,7 +502,7 @@ function renderMetrics() {
     $("capeVal").textContent = `${fmtCape(p.cape)} J/kg`;
     $("cinVal").textContent = `${fmtCape(p.cin)} J/kg`;
     $("capeCat").textContent = `${p.category.label} instability`;
-    $("wmaxVal").textContent = `√(2 CAPE) ≈ ${p.wmax.toFixed(0)} m/s  (undilute, no water loading)`;
+    $("wmaxVal").textContent = `√(2 CAPE) ≈ ${p.wmax.toFixed(0)} m/s`;
     $("scalePointer").style.left = scalePos(p.cape);
     $("scalePointer").style.opacity = "1";
   }
@@ -534,7 +549,7 @@ function reveal() {
   const p = state.parcel;
   mem.choice = choice;
   if (!choice) {
-    mem.feedback = "Pick an option first — the point is to commit before the number.";
+    mem.feedback = "Pick one first.";
     $("predictFeedback").textContent = mem.feedback;
     $("predictFeedback").className = "status error";
     return;
@@ -545,21 +560,20 @@ function reveal() {
     const actual = categoryId(p.cape);
     const ok = choice === actual;
     msg = ok
-      ? `Matches the picture: ${fmtCape(p.cape)} J/kg is ${p.category.label} CAPE. The orange area was the evidence.`
-      : `The orange area sizes to ${fmtCape(p.cape)} J/kg (${p.category.label}). Use the area, not a guess about the weather headline.`;
+      ? `${fmtCape(p.cape)} J/kg — ${p.category.label}.`
+      : `${fmtCape(p.cape)} J/kg — ${p.category.label}. Look at the area again.`;
   } else {
     const actual = changeId(mem.lastCape ?? p.cape, p.cape);
     const d = p.cape - (mem.lastCape ?? p.cape);
     const delta = `${d >= 0 ? "+" : ""}${Math.round(d)} J/kg`;
     const ok = choice === actual;
-    msg = ok
-      ? `Yes. CAPE ${fmtCape(mem.lastCape ?? p.cape)} → ${fmtCape(p.cape)} (${delta}).`
-      : `CAPE went ${fmtCape(mem.lastCape ?? p.cape)} → ${fmtCape(p.cape)} (${delta}). Watch the orange fill, not the slider labels.`;
+    msg = `CAPE ${fmtCape(mem.lastCape ?? p.cape)} → ${fmtCape(p.cape)} (${delta}).`;
+    if (!ok) msg += " Look at the fill again.";
     if (spec.targetDT != null && Math.abs(state.t - state.t0 - spec.targetDT) > 0.6) {
-      msg += ` (You are ${signed(state.t - state.t0)} from the original T; the beat asks for ${signed(spec.targetDT)}.)`;
+      msg += ` Aim ${signed(spec.targetDT)} (you are at ${signed(state.t - state.t0)}).`;
     }
     if (spec.targetDTd != null && Math.abs(state.td - state.td0 - spec.targetDTd) > 0.6) {
-      msg += ` (You are ${signed(state.td - state.td0)} from the original Td; the beat asks for ${signed(spec.targetDTd)}.)`;
+      msg += ` Aim ${signed(spec.targetDTd)} (you are at ${signed(state.td - state.td0)}).`;
     }
   }
   mem.revealed = true;
@@ -590,8 +604,7 @@ function loadFromText(text, label) {
   try {
     const sounding = parseUwyoText(text);
     sounding.title = sounding.header;
-    sounding.blurb =
-      label || "Pasted University of Wyoming Text:List sounding. Environment locked; sliders move the surface parcel.";
+    sounding.blurb = label || "Pasted sounding.";
     applySounding(sounding, null);
     resetPastePredict();
     saveCurrentSlot();
@@ -622,7 +635,7 @@ async function onFetch() {
   try {
     const sounding = await fetchUwyo({ station: stn, year, month, day, hour });
     sounding.title = sounding.header;
-    sounding.blurb = "Fetched from the University of Wyoming archive. Environment locked.";
+    sounding.blurb = "Fetched sounding.";
     applySounding(sounding, null);
     resetPastePredict();
     saveCurrentSlot();
@@ -632,7 +645,7 @@ async function onFetch() {
     if (err.cors && err.url) {
       status(
         $("loadStatus"),
-        `CORS blocked the Wyoming server (expected in most browsers). Open this URL, copy the whole Text:List page, and paste it above: ${err.url}`,
+        `Fetch blocked. Open the Wyoming page, copy Text: List, paste above. ${err.url}`,
         "error"
       );
       window.open(err.url, "_blank", "noopener");
@@ -684,13 +697,13 @@ function bind() {
   $("btnPaste").addEventListener("click", () => loadFromText($("pasteBox").value, "Pasted sounding."));
   $("btnSamplePaste").addEventListener("click", () => {
     $("pasteBox").value = toUwyoText(EXAMPLES.highCape);
-    status($("loadStatus"), "Sample OUN 18Z 24 May 2011 text inserted. Click “Plot pasted sounding”.", "ok");
+    status($("loadStatus"), "Sample Norman 18Z inserted. Plot it.", "ok");
   });
   $("btnReloadNorman").addEventListener("click", () => {
     applySounding(EXAMPLES.highCape, "highCape");
     resetPastePredict();
     saveCurrentSlot();
-    status($("loadStatus"), "Reloaded High-CAPE Plains — Norman 18Z 24 May 2011.", "ok");
+    status($("loadStatus"), "Reloaded Norman 18Z 24 May 2011.", "ok");
     renderMetrics();
   });
   $("btnFetch").addEventListener("click", onFetch);

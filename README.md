@@ -1,12 +1,8 @@
 # CAPE on a Skew-T
 
-Pedagogical CAPE / skew-T visualizer for **Union College GEO 114 Extreme Weather**.
+Static skew-T lab: CAPE as a filled area that grows or shrinks when surface T or Td change. Seven steps map onto [Lab4-notes.md](Lab4-notes.md). Instructor keys: [INSTRUCTOR.md](INSTRUCTOR.md).
 
-Students should **see CAPE as a filled positive area** on a skew-T that grows or shrinks when they change surface temperature or dewpoint. The J/kg number is a size tag, not the lesson.
-
-The app is a **7-step lab wizard** that maps 1:1 onto [Lab4-notes.md](Lab4-notes.md) (Setup + six beats). The skew-T stays visible; the right-hand panel (bottom on mobile) shows only the Ask / Evidence / Claim prompts and the controls for the current step. Prev / Next and progress dots move between steps without wiping student predictions.
-
-The core exercise runs entirely in this static app. No third-party skew-T site is required.
+The skew-T stays visible; the right-hand panel shows only the current step. Prev / Next and progress dots move between steps without wiping predictions. The core exercise runs in this app — no third-party skew-T site.
 
 ## Run locally
 
@@ -36,13 +32,13 @@ The wizard reveals controls only when the beat needs them. Nothing is grayed out
 
 | Step | What is on screen |
 |---|---|
-| 1 · Orient | High-CAPE Plains loaded. Checklist (orange, blue, dashed parcel). No sliders. |
-| 2 · The orange area | CAPE/CIN as areas. Claim prompt. Still no sliders. |
-| 3 · Predict then reveal | Weak / moderate / strong / extreme + Reveal. Numbers stay hidden until then. |
-| 4 · Heat the surface | **T** slider only (Td locked). Predict grow/shrink, then +3 °C. Reset parcel. |
-| 5 · Dry the dewpoint | **Td** slider only, starting from the original parcel. −5 °C Td; CIN can appear. |
-| 6 · The cap | Auto-switches to Capped morning (12Z). T heating (+6 °C). Paste hidden. |
-| 7 · Paste a real sounding | Paste / fetch / sample-insert unlock. Optional T tweak. Reload Norman 18Z to compare. |
+| 1 Orient | Norman 18Z loaded. Checklist (orange, blue, dashed parcel). No sliders. |
+| 2 Orange | Areas. Write-in. Still no sliders. |
+| 3 Predict | Weak / moderate / strong / extreme + Reveal. Numbers stay hidden until then. |
+| 4 Heat | **T** slider only (Td locked). Predict grow/shrink, then +3 °C. Reset parcel. |
+| 5 Dry | **Td** slider only, starting from the original parcel. −5 °C Td; CIN can appear. |
+| 6 Cap | Auto-switches to Capped morning (12Z). T heating (+6 °C). Paste hidden. |
+| 7 Paste | Paste / fetch / sample-insert unlock. Optional T tweak. Reload Norman 18Z to compare. |
 
 | Always | Effect |
 |---|---|
@@ -158,12 +154,13 @@ js/skewt.js         skew-T drawing
 js/soundings.js     examples, UWYO parser, fetch
 js/app.js           7-step wizard, predict-first, load UI
 examples/           sample UWYO text
-Lab4-notes.md       Ask → evidence → Claim beats
+Lab4-notes.md       student handout
+INSTRUCTOR.md       keys and classroom notes
 ```
 
 ## Lab
 
-See [Lab4-notes.md](Lab4-notes.md) for GEO 114 beats. The on-screen steps are those beats. Instructors: predict-first is locked on (no toggle).
+Student handout: [Lab4-notes.md](Lab4-notes.md). Keys: [INSTRUCTOR.md](INSTRUCTOR.md). Predict-first is locked on (no toggle).
 
 ## Data credit
 

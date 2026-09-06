@@ -54,51 +54,23 @@ code,
 }
 
 .app-header {
-  background: var(--navy);
-  color: #f6f1e8;
-  padding: 0.85rem 1.4rem 0.95rem;
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  align-items: baseline;
-  flex-wrap: wrap;
-  border-bottom: 4px solid var(--garnet);
+  padding: 0.7rem 1.2rem 0;
 }
 
-.brand {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-}
-
-.eyebrow {
-  font-size: 0.72rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #d9b3bc;
-  font-weight: 650;
-}
-
-.brand h1 {
+.app-header h1 {
   font-family: var(--display);
   font-weight: 600;
-  font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+  font-size: 1.28rem;
   margin: 0;
   letter-spacing: -0.01em;
-}
-
-.lede {
-  margin: 0;
-  max-width: 34rem;
-  color: #d8d2c6;
-  font-size: 0.9rem;
+  color: var(--ink);
 }
 
 .layout {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.8fr);
   gap: 1rem;
-  padding: 1rem 1.2rem 1.4rem;
+  padding: 0.65rem 1.2rem 1rem;
   flex: 1;
 }
 
@@ -230,7 +202,7 @@ code,
   display: flex;
   flex-direction: column;
   min-height: 0;
-  max-height: calc(100vh - 7rem);
+  max-height: calc(100vh - 4.5rem);
   overflow: hidden;
 }
 
@@ -318,9 +290,7 @@ textarea:focus-visible {
 
 .locked-note {
   font-size: 0.82rem;
-  background: #f3ead8;
-  border-left: 3px solid var(--garnet);
-  padding: 0.4rem 0.6rem;
+  color: var(--muted);
   margin: 0;
 }
 
@@ -563,9 +533,9 @@ textarea {
 }
 
 .footer {
-  padding: 0.4rem 1.2rem 1rem;
+  padding: 0.15rem 1.2rem 0.75rem;
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
 }
 
 .visually-hidden {
@@ -637,9 +607,6 @@ textarea {
 }
 
 .ask {
-  background: #f3ead8;
-  border-left: 3px solid var(--garnet);
-  padding: 0.55rem 0.7rem;
   margin: 0;
   font-size: 0.95rem;
 }
@@ -648,10 +615,17 @@ textarea {
   outline: none;
 }
 
+.evidence-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 0.9rem;
+  display: grid;
+  gap: 0.22rem;
+}
+
 .prompt-block h3 {
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 0.92rem;
+  font-weight: 650;
   color: var(--garnet-dark);
   margin: 0 0 0.25rem;
 }
@@ -664,7 +638,7 @@ textarea {
 
 .prompt-block textarea {
   margin-top: 0.45rem;
-  min-height: 4.6rem;
+  min-height: 3.1rem;
   font-size: 0.85rem;
   font-family: var(--font);
 }
